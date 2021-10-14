@@ -1,21 +1,3 @@
-class Topic {
-	constructor(topicNode) {
-		this.node = topicNode;
-	}
-
-	get topicName() {
-		return this.topicNameFromNode();
-	}
-
-	get topicURL() {
-		return this.topicURLFromNode();
-	}
-
-	topicNameFromNode() {
-		return document.evaludate(".//h1", this.node, null, XpathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.innerHTML;
-	}
-}
-
 class Entry {
 
 	constructor(entryNode) {
@@ -79,36 +61,6 @@ class Entry {
 			favoriteCount: this.favoriteCount,
 			topicURL: this.topicURL
 		}
-	}
-}
-
-function createDertGGElement() {
-	let spanElem = document.createElement("span");
-	spanElem.classList.add("derdini-gg");
-
-	let aElem = document.createElement("a");
-	chrome.storage.sync.get("buttonName", ({ buttonName }) => {
-		aElem.innerText = buttonName;
-	});
-
-	aElem.addEventListener("click", (e) => {
-		let entryNode = e.target.closest("li");
-		let entry = new Entry(entryNode);
-
-		console.log(JSON.stringify(entry));
-	});
-
-	spanElem.append(aElem);
-	return spanElem;
-}
-
-function appendDertGGElements() {
-	let nodes = document.evaluate("//ul[@id='entry-item-list']/li", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-
-	for (let i = 0; i < nodes.snapshotLength; i++) {
-		let node = nodes.snapshotItem(i);
-		let footer = node.getElementsByClassName("feedback")[0];
-		footer.append(createDertGGElement());
 	}
 }
 
