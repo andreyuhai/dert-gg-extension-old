@@ -1,0 +1,43 @@
+{
+    "name": "Dert GG",
+    "description": "Aranan buton bulundu!",
+    "version": "0.1.0",
+    "manifest_version": 3,
+    "permissions": ["storage", "activeTab", "scripting"],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "/img/drops_16.png",
+            "24": "/img/drops_24.png",
+            "32": "/img/drops_32.png",
+            "64": "/img/drops_64.png",
+            "128": "/img/drops_128.png",
+            "256": "/img/drops_256.png"
+        }
+    },
+    "icons": {
+        "16": "/img/drops_16.png",
+        "24": "/img/drops_24.png",
+        "32": "/img/drops_32.png",
+        "64": "/img/drops_64.png",
+        "128": "/img/drops_128.png",
+        "256": "/img/drops_256.png"
+    },
+    "content_scripts": [
+        {
+            "matches": ["https://eksisozluk.com/*"],
+            "exclude_matches": ["https://eksisozluk.com/biri/*"],
+            "js": ["content-script.js"]
+        },
+        {
+            "matches": ["https://eksisozluk.com/biri/*"],
+            "js": ["biri-content-script.js"]
+        }
+    ],
+    "externally_connectable": {
+        "matches": ["http://localhost:4000/*"]
+    }
+}
