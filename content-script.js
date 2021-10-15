@@ -14,11 +14,23 @@ class Entry {
 	}
 
 	get content() {
-		return this.node.children[0].innerHTML;
+		return document.evaluate(".//div[contains(@class, 'content')]",
+			this.node,
+			null,
+			XPathResult.FIRST_ORDERED_NODE_TYPE,
+			null)
+			.singleNodeValue
+			.innerHTML;
 	}
 
 	get entryDate() {
-		return this.node.children[1].children[1].children[0].text;
+		return document.evaluate(".//a[@class='entry-date permalink']",
+			this.node,
+			null,
+			XPathResult.FIRST_ORDERED_NODE_TYPE,
+			null)
+			.singleNodeValue
+			.text;
 	}
 
 	get entryId() {
@@ -44,11 +56,17 @@ class Entry {
 		});
 
 		a.addEventListener("click", (e) => {
-			console.log(JSON.stringify(this));
+			alert(JSON.stringify(this));
 		});
 
 		span.append(a)
-		this.node.children[1].children[0].append(span);
+		document.evaluate(".//div[@class='feedback']",
+			this.node,
+			null,
+			XPathResult.FIRST_ORDERED_NODE_TYPE,
+			null)
+			.singleNodeValue
+			.append(span);
 	}
 
 	toJSON() {
