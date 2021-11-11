@@ -35,7 +35,7 @@
     "content_scripts": [
         {
             "matches": ["https://eksisozluk.com/*"],
-            "exclude_matches": ["https://eksisozluk.com/biri/*"],
+            "exclude_matches": ["https://eksisozluk.com/biri/*", "https://eksisozluk.com/entry/*"],
             "js": ["content-script.js"]
         },
         {
