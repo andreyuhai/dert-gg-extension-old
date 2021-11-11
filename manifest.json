@@ -3,6 +3,10 @@
     "description": "Aranan buton bulundu!",
     "version": "0.1.0",
     "manifest_version": 3,
+    "options_ui": {
+        "page": "/options/options.html",
+        "open_in_tab": false
+    },
     "permissions": ["storage", "activeTab", "scripting"],
     "background": {
         "service_worker": "background.js"
