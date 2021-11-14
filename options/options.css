@@ -1,0 +1,12 @@
+body {
+	height: 100%;
+	min-width: 800px;
+	overflow: hidden;
+}
+.container {
+	padding: 15px;
+}
+
+#status {
+	display: none;
+}
