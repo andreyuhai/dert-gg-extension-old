@@ -37,10 +37,6 @@
             "matches": ["https://eksisozluk.com/*"],
             "exclude_matches": ["https://eksisozluk.com/biri/*", "https://eksisozluk.com/entry/*"],
             "js": ["content-script.js"]
-        },
-        {
-            "matches": ["https://eksisozluk.com/biri/*"],
-            "js": ["biri-content-script.js"]
         }
     ],
     "externally_connectable": {
