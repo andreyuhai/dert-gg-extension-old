@@ -48,21 +48,49 @@ chrome.runtime.onMessageExternal.addListener(
 );
 
 async function checkAuth(token) {
-  const resp =
-    await (fetch("http://localhost:4000/auth", {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    })
-      .then(response => response.json()))
+  const AUTH_URL = await authURL();
 
-  return resp;
+  const RESP = await fetch(AUTH_URL, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+
+  const RESP_JSON = RESP.json();
+
+  return RESP_JSON;
 }
 
 function changeAppState({authorized, data}) {
   if (authorized) {
     appState.isAuthenticated = true;
     appState.accountInfo = data;
+  }
+
+  return {authorized, data}
+}
+
+function changeIcon({authorized, data}) {
+  if (authorized) {
+    chrome.action.setIcon({path: AUTHORIZED_ICONSET})
+  } else {
+    chrome.action.setIcon({path: UNAUTHORIZED_ICONSET})
+  }
+}
+
+async function authURL() {
+  const BASE_URL = await baseURL();
+
+  return new URL("auth", BASE_URL);
+}
+
+async function baseURL() {
+  const EXTENSION_INFO = await chrome.management.getSelf();
+
+  if (EXTENSION_INFO.installType == "development") {
+    return new URL("http://localhost:4000/api/v1/")
+  } else {
+    return new URL("https://dert.gg/api/v1/")
   }
 }
