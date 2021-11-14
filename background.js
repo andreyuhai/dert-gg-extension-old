@@ -36,17 +36,13 @@ chrome.runtime.onConnect.addListener(function(port) {
   });
 });
 
-// TODO: Here receive the token and save into the local storage
 chrome.runtime.onMessageExternal.addListener(
   function(request, sender, sendResponse) {
     if (request.token)
       chrome.storage.local.set({"token": request.token}, function() {
         checkAuth(request.token)
           .then(data => changeAppState(data))
-      });
-
-      chrome.storage.local.get("token", function(obj) {
-        console.log(obj);
+          .then(data => changeIcon(data))
       });
   }
 );
