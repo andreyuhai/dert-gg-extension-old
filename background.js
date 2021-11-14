@@ -21,15 +21,11 @@ const AUTHORIZED_ICONSET = {
 let buttonName = "derdini sikeyim";
 
 chrome.runtime.onInstalled.addListener(() => {
-	chrome.storage.sync.set({ buttonName });
+  chrome.storage.sync.set({ buttonName });
 });
 
 var appState = {
-    isToggled: false,
-    isAuthenticated: false,
-    accountInfo: {
-        emailConfirmed: true
-    }
+  isAuthenticated: false,
 };
 
 chrome.runtime.onConnect.addListener(function(port) {
