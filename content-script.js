@@ -94,28 +94,19 @@ class Entry {
 }
 
 function run() {
-	let nodes = document.evaluate("//ul[@id='entry-item-list']/li", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+	chrome.runtime.sendMessage({type: "isAuthenticated"}, function(foo) {
+		console.log(foo, "isAuth here")
+		if (foo.isAuthenticated) {
+			let nodes = document.evaluate("//ul[@id='entry-item-list']/li", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 
-	for (let i = 0; i < nodes.snapshotLength; i++) {
-		let node = nodes.snapshotItem(i);
-		let entry = new Entry(node);
-		console.log(JSON.stringify(entry))
-		entry.appendDertGGButton();
-	}
+			for (let i = 0; i < nodes.snapshotLength; i++) {
+				let node = nodes.snapshotItem(i);
+				let entry = new Entry(node);
+				console.log(JSON.stringify(entry))
+				entry.appendDertGGButton();
+			}
+		}
+	});
 }
 
-let appState;
-
-var port = chrome.runtime.connect({name: "content"});
-port.postMessage({request: "appState"});
-
-port.onMessage.addListener(function(msg) {
-	if (msg.response === "appState") {
-		appState = msg.appState;
-		// Append elements only if the user is authenticated
-		// if (appState.isAuthenticated) {
-			// appendDertGGElements();
-		  run();
-		// }
-	}
-});
+run();
