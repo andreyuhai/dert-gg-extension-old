@@ -1,4 +1,4 @@
-const UNAUTHORIZED_ICONSET = {
+const UNAUTHENTICATED_ICONSET = {
   "16": "/img/droplet_unauthenticated_16.png",
   "24": "/img/droplet_unauthenticated_24.png",
   "32": "/img/droplet_unauthenticated_32.png",
@@ -8,7 +8,7 @@ const UNAUTHORIZED_ICONSET = {
   "512": "/img/droplet_unauthenticated_512.png"
 }
 
-const AUTHORIZED_ICONSET = {
+const AUTHENTICATED_ICONSET = {
   "16": "/img/droplet_16.png",
   "24": "/img/droplet_24.png",
   "32": "/img/droplet_32.png",
