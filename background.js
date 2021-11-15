@@ -18,35 +18,6 @@ const AUTHENTICATED_ICONSET = {
   "512": "/img/droplet_512.png"
 }
 
-let buttonName = "derdini sikeyim";
-
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.sync.set({ buttonName });
-});
-
-var appState = {
-  isAuthenticated: false,
-};
-
-chrome.runtime.onConnect.addListener(function(port) {
-  port.onMessage.addListener(function(msg) {
-    // console.log(msg);
-    if (msg.request === "appState")
-      port.postMessage({response: "appState", appState: appState});
-  });
-});
-
-chrome.runtime.onMessageExternal.addListener(
-  function(request, sender, sendResponse) {
-    if (request.token)
-      chrome.storage.local.set({"token": request.token}, function() {
-        checkAuth(request.token)
-          .then(data => changeAppState(data))
-          .then(data => changeIcon(data))
-      });
-  }
-);
-
 async function checkAuth(token) {
   const AUTH_URL = await authURL();
 
@@ -62,20 +33,17 @@ async function checkAuth(token) {
   return RESP_JSON;
 }
 
-function changeAppState({authorized, data}) {
-  if (authorized) {
-    appState.isAuthenticated = true;
-    appState.accountInfo = data;
-  }
-
-  return {authorized, data}
+function changeAppState({authenticated, data}) {
+  chrome.storage.local.set({isAuthenticated: authenticated}, function() {
+    changeIcon({isAuthenticated: authenticated});
+  });
 }
 
-function changeIcon({authorized, data}) {
-  if (authorized) {
-    chrome.action.setIcon({path: AUTHORIZED_ICONSET})
+function changeIcon({isAuthenticated}) {
+  if (isAuthenticated) {
+    chrome.action.setIcon({path: AUTHENTICATED_ICONSET})
   } else {
-    chrome.action.setIcon({path: UNAUTHORIZED_ICONSET})
+    chrome.action.setIcon({path: UNAUTHENTICATED_ICONSET})
   }
 }
 
