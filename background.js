@@ -62,3 +62,44 @@ async function baseURL() {
     return new URL("https://dert.gg/api/v1/")
   }
 }
+
+/******************** CHROME RUNTIME LISTENERS ********************/
+
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.storage.sync.set({buttonName: "derdini sikeyim"});
+});
+
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    if (request.type == "isAuthenticated") {
+      chrome.storage.local.get("isAuthenticated", function({isAuthenticated}) {
+        console.log(isAuthenticated,  "here we check");
+        sendResponse({isAuthenticated});
+      })
+    }
+
+    //  If you want to asynchronously use sendResponse,
+    //  add return true; to the onMessage event handler,
+    // which is what we do above.
+    return true;
+  }
+)
+
+chrome.runtime.onMessageExternal.addListener(
+  function(request, sender, sendResponse) {
+    if (request.token)
+      chrome.storage.local.set({token: request.token}, function() {
+        checkAuth(request.token)
+          .then(data => changeAppState(data))
+      });
+  }
+);
+
+/******************** ON START UP ********************/
+
+chrome.storage.local.get("token", ({token}) => {
+  if (token)
+    changeAppState({authenticated: true})
+  else
+    changeAppState({authenticated: false})
+})
