@@ -13,14 +13,16 @@ class Entry {
 		return this.attributes["data-author-id"].value;
 	}
 
-	get content() {
-		return document.evaluate(".//div[contains(@class, 'content')]",
-			this.node,
-			null,
-			XPathResult.FIRST_ORDERED_NODE_TYPE,
-			null)
-			.singleNodeValue
-			.innerHTML;
+	get contentHTML() {
+		return this.#entryContentDiv()
+			.innerHTML
+			.trim();
+	}
+
+	get contentText() {
+		return this.#entryContentDiv()
+			.textContent
+			.trim();
 	}
 
 	get entryDate() {
@@ -45,13 +47,21 @@ class Entry {
 		return this.attributes["data-id"].baseURI;
 	}
 
+	#entryContentDiv() {
+		return document.evaluate(".//div[contains(@class, 'content')]",
+			this.node,
+			null,
+			XPathResult.FIRST_ORDERED_NODE_TYPE,
+			null)
+			.singleNodeValue
+	}
+
 	appendDertGGButton() {
 		let span = document.createElement("span");
 		span.className = "derdini-gg"
 
 		let a = document.createElement("a");
 		chrome.storage.sync.get("buttonName", ({ buttonName }) => {
-			console.log(buttonName);
 			a.innerText = buttonName;
 		});
 
@@ -73,7 +83,8 @@ class Entry {
 		return {
 			author: this.author,
 			authorId: this.authorId,
-			content: this.content,
+			contentHTML: this.contentHTML,
+			contentText: this.contentText,
 			entryDate: this.entryDate,
 			entryId: this.entryId,
 			favoriteCount: this.favoriteCount,
