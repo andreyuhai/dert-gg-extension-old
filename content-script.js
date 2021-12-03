@@ -3,6 +3,7 @@ class Entry {
 	constructor(entryNode) {
 		this.node = entryNode;
 		this.attributes = entryNode.attributes;
+		this.dertGGButton = new DertGGButton(this.toJSON());
 	}
 
 	get author() {
@@ -32,7 +33,8 @@ class Entry {
 			XPathResult.FIRST_ORDERED_NODE_TYPE,
 			null)
 			.singleNodeValue
-			.text;
+			.text
+			.trim();
 	}
 
 	get entryId() {
@@ -57,55 +59,90 @@ class Entry {
 	}
 
 	appendDertGGButton() {
-		let span = document.createElement("span");
-		span.className = "derdini-gg"
-
-		let a = document.createElement("a");
-		chrome.storage.sync.get("buttonName", ({ buttonName }) => {
-			a.innerText = buttonName;
-		});
-
-		a.addEventListener("click", (e) => {
-			alert(JSON.stringify(this));
-		});
-
-		span.append(a)
 		document.evaluate(".//div[@class='feedback']",
 			this.node,
 			null,
 			XPathResult.FIRST_ORDERED_NODE_TYPE,
 			null)
 			.singleNodeValue
-			.append(span);
+			.append(this.dertGGButton.span);
 	}
 
 	toJSON() {
 		return {
-			author: this.author,
-			authorId: this.authorId,
-			contentHTML: this.contentHTML,
-			contentText: this.contentText,
-			entryDate: this.entryDate,
-			entryId: this.entryId,
-			favoriteCount: this.favoriteCount,
-			topicURL: this.topicURL
+			"author": this.author,
+			"author-id": this.authorId,
+			"entry-id": this.entryId,
+			"entry-timestamp": this.entryDate,
+			"favorite-count": this.favoriteCount,
+			"html-content": this.contentHTML,
+			"text-content": this.contentText,
+			"topic-url": this.topicURL
 		}
 	}
 }
 
+class DertGGButton {
+
+	constructor(reqParams) {
+		this.span = this.createSpanElem();
+		this.anchor = this.createAnchorElem(reqParams);
+
+		this.span.append(this.anchor);
+	}
+
+	createSpanElem() {
+		let span = document.createElement("span");
+		span.className = "dert-gg"
+
+		return span;
+	}
+
+	createAnchorElem(reqParams) {
+		let a = document.createElement("a");
+		chrome.storage.sync.get("buttonName", ({ buttonName }) => {
+			a.innerText = buttonName;
+		});
+
+		a.addEventListener("click", (e) => {
+			chrome.runtime.sendMessage({type: "upvote", params: reqParams}, (response) => {
+				console.log(response);
+				console.log(a.innerText = "foobar");
+			});
+
+			alert(JSON.stringify(this));
+		});
+
+		return a;
+	}
+}
+
+const ENTRIES = [];
+
 function run() {
-	chrome.runtime.sendMessage({type: "isAuthenticated"}, function(foo) {
-		console.log(foo, "isAuth here")
-		if (foo.isAuthenticated) {
+	chrome.runtime.sendMessage({type: "isAuthenticated"}, function({isAuthenticated}) {
+		if (isAuthenticated) {
 			let nodes = document.evaluate("//ul[@id='entry-item-list']/li", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 
 			for (let i = 0; i < nodes.snapshotLength; i++) {
 				let node = nodes.snapshotItem(i);
 				let entry = new Entry(node);
+				ENTRIES.push(entry);
 				console.log(JSON.stringify(entry))
 				entry.appendDertGGButton();
 			}
 		}
+
+		console.log(ENTRIES);
+		console.log(ENTRIES.map(entry => entry.entryId));
+	});
+}
+
+function getVotes() {
+	let entryIds = ENTRIES.map(entry => entry.entryId);
+
+	chrome.runtime.sendMessage({type: "getVotes", entryIds: entryIds}, function(response) {
+		console.log("Here's the response", response);
 	});
 }
 
