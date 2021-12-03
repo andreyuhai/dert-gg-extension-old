@@ -12,7 +12,6 @@
         "service_worker": "background.js"
     },
     "action": {
-        "default_popup": "popup.html",
         "default_icon": {
             "16": "/img/droplet_unauthenticated_16.png",
             "24": "/img/droplet_unauthenticated_24.png",
