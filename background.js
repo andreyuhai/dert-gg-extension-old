@@ -21,19 +21,16 @@ const AUTHENTICATED_ICONSET = {
 async function checkAuth(token) {
   const AUTH_URL = await authURL();
 
-  const RESP = await fetch(AUTH_URL, {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  })
+  const RESP = await sendAuthReq(AUTH_URL, token);
 
-  const RESP_JSON = RESP.json();
-
-  return RESP_JSON;
+  if (RESP.ok) {
+    return {authenticated: true}
+  } else {
+    return {authenticated: false}
+  }
 }
 
-function changeAppState({authenticated, data}) {
+function changeAppState({authenticated}) {
   chrome.storage.local.set({isAuthenticated: authenticated}, function() {
     changeIcon({isAuthenticated: authenticated});
   });
@@ -45,6 +42,12 @@ function changeIcon({isAuthenticated}) {
   } else {
     chrome.action.setIcon({path: UNAUTHENTICATED_ICONSET})
   }
+}
+
+async function votesURL() {
+  const BASE_URL = await baseURL();
+
+  return new URL("votes", BASE_URL);
 }
 
 async function authURL() {
@@ -70,12 +73,24 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
+   function(request, sender, sendResponse) {
     if (request.type == "isAuthenticated") {
       chrome.storage.local.get("isAuthenticated", function({isAuthenticated}) {
-        console.log(isAuthenticated,  "here we check");
         sendResponse({isAuthenticated});
       })
+    } else if (request.type == "upvote") {
+      chrome.storage.local.get(["isAuthenticated", "token"], function({isAuthenticated, token}) {
+        if (token) {
+          votesURL()
+            .then(url => {
+              sendUpvoteReq(url, token, request.params)
+                .then(response => handleUpvoteResponse(response, sendResponse));
+            });
+        }
+      })
+
+    } else if (request.type == "getVotes") {
+
     }
 
     //  If you want to asynchronously use sendResponse,
@@ -95,6 +110,12 @@ chrome.runtime.onMessageExternal.addListener(
   }
 );
 
+/******************** POPUP ONCLICK LISTENER ********************/
+
+chrome.action.onClicked.addListener(() => {
+  chrome.tabs.create({url: "http://localhost:4000/login"})
+})
+
 /******************** ON START UP ********************/
 
 chrome.storage.local.get("token", ({token}) => {
@@ -103,3 +124,57 @@ chrome.storage.local.get("token", ({token}) => {
   else
     changeAppState({authenticated: false})
 })
+
+
+/******************** RESPONSE HANDLER ********************/
+
+async function handleUpvoteResponse(response, sendResponse) {
+  console.log("handleUpvoteResponse invoked", response);
+  console.log("response", response.json);
+  console.log("response", response.json());
+
+
+  if (response.ok) {
+    // Do something related to upvote or downvote here
+    sendResponse({response});
+  } else if (response.status == 401) {
+    sendResponse({auth: "unauth"});
+    changeAppState({authenticated: false});
+  }
+}
+
+
+/******************** REQUESTS ********************/
+
+async function sendAuthReq(authURL, token) {
+  console.log("sendAuthReq invoked");
+  return fetch(authURL, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+}
+
+async function sendUpvoteReq(votesURL, token, requestParams) {
+  return fetch(votesURL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(requestParams)
+  });
+}
+
+async function sendGetVotesReq(votesURL, token, requestParams) {
+  return fetch(votesURL, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(requestParams)
+  });
+
+}
