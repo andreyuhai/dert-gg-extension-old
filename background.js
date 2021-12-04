@@ -44,6 +44,9 @@ function changeIcon({isAuthenticated}) {
   }
 }
 
+
+/******************** URL FUNCTIONS ********************/
+
 async function votesURL() {
   const BASE_URL = await baseURL();
 
@@ -129,14 +132,11 @@ chrome.storage.local.get("token", ({token}) => {
 /******************** RESPONSE HANDLER ********************/
 
 async function handleUpvoteResponse(response, sendResponse) {
-  console.log("handleUpvoteResponse invoked", response);
-  console.log("response", response.json);
-  console.log("response", response.json());
-
+  const RESP = await response.json();
 
   if (response.ok) {
     // Do something related to upvote or downvote here
-    sendResponse({response});
+    sendResponse(RESP);
   } else if (response.status == 401) {
     sendResponse({auth: "unauth"});
     changeAppState({authenticated: false});
@@ -176,5 +176,4 @@ async function sendGetVotesReq(votesURL, token, requestParams) {
     },
     body: JSON.stringify(requestParams)
   });
-
 }
