@@ -68,6 +68,10 @@ class Entry {
 			.append(this.dertGGButton.span);
 	}
 
+	removeDertGGButton() {
+		this.dertGGButton.remove();
+	}
+
 	toJSON() {
 		return {
 			"author": this.author,
