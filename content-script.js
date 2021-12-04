@@ -114,15 +114,30 @@ class DertGGButton {
 		});
 
 		a.addEventListener("click", (e) => {
-			chrome.runtime.sendMessage({type: "upvote", params: reqParams}, (response) => {
-				console.log(response);
-				console.log(a.innerText = "foobar");
-			});
-
-			alert(JSON.stringify(this));
+			chrome.runtime.sendMessage({type: "upvote", params: reqParams}, response => this.upvoteResponseHandler(this, response));
 		});
 
 		return a;
+	}
+
+	upvoteResponseHandler(elem, {auth, "vote-count": voteCount}) {
+		if(auth) {
+			ENTRIES.forEach(entry => entry.removeDertGGButton());
+		} else {
+			elem.setGGCount(voteCount);
+		}
+	}
+
+	remove() {
+		this.span.remove();
+	}
+
+	setGGCount(count) {
+		if (count ==  0) {
+			this.countSpan.innerText = "";
+		} else {
+			this.countSpan.innerText = ` (${count})`;
+		}
 	}
 }
 
