@@ -89,15 +89,20 @@ class Entry {
 class DertGGButton {
 
 	constructor(reqParams) {
-		this.span = this.createSpanElem();
+		this.span = this.createSpanElem({className: "dert-gg"});
 		this.anchor = this.createAnchorElem(reqParams);
+		this.countSpan = this.createSpanElem({className: "dert-gg-count"});
 
 		this.span.append(this.anchor);
+		this.span.append(this.countSpan);
 	}
 
-	createSpanElem() {
+	createSpanElem(opts = {}) {
 		let span = document.createElement("span");
-		span.className = "dert-gg"
+
+		if (opts["className"]) {
+			span.className = opts["className"];
+		}
 
 		return span;
 	}
