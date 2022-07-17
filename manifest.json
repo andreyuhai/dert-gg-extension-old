@@ -1,6 +1,6 @@
 {
     "name": "Dert GG",
-    "description": "Aranan buton bulundu!",
+    "description": "Kutsal bilgi kaynağının aranan butonu",
     "version": "0.1.0",
     "manifest_version": 3,
     "options_ui": {
@@ -39,6 +39,6 @@
         }
     ],
     "externally_connectable": {
-        "matches": ["http://localhost:4000/*"]
+        "matches": ["https://wild-frog-7798.fly.dev/*", "http://localhost:4000/*"]
     }
 }
