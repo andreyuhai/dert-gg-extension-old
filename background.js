@@ -123,7 +123,8 @@ chrome.action.onClicked.addListener(() => {
 
 chrome.storage.local.get("token", ({token}) => {
   if (token)
-    changeAppState({authenticated: true})
+    checkAuth(token)
+      .then(data => changeAppState(data))
   else
     changeAppState({authenticated: false})
 })
@@ -147,7 +148,6 @@ async function handleUpvoteResponse(response, sendResponse) {
 /******************** REQUESTS ********************/
 
 async function sendAuthReq(authURL, token) {
-  console.log("sendAuthReq invoked");
   return fetch(authURL, {
     method: 'GET',
     headers: {
