@@ -62,11 +62,7 @@ async function authURL() {
 async function baseURL() {
   const EXTENSION_INFO = await chrome.management.getSelf();
 
-  if (EXTENSION_INFO.installType == "development") {
-    return new URL("http://localhost:4000/api/v1/")
-  } else {
-    return new URL("https://dert.gg/api/v1/")
-  }
+  return new URL("https://dert.gg/api/v1/")
 }
 
 /******************** CHROME RUNTIME LISTENERS ********************/
@@ -116,7 +112,12 @@ chrome.runtime.onMessageExternal.addListener(
 /******************** POPUP ONCLICK LISTENER ********************/
 
 chrome.action.onClicked.addListener(() => {
-  chrome.tabs.create({url: "http://localhost:4000/login"})
+  chrome.storage.local.get("token", ({token}) => {
+    if (token)
+      chrome.tabs.create({url: "https://dert.gg"})
+    else
+      chrome.tabs.create({url: "https://dert.gg/login/new"})
+  })
 })
 
 /******************** ON START UP ********************/

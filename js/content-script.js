@@ -59,7 +59,7 @@ class Entry {
 	}
 
 	appendDertGGButton() {
-		document.evaluate(".//div[@class='feedback']",
+		document.evaluate(".//div[@class='feedback-container']",
 			this.node,
 			null,
 			XPathResult.FIRST_ORDERED_NODE_TYPE,
@@ -144,6 +144,16 @@ class DertGGButton {
 const ENTRIES = [];
 
 function run() {
+	var styles = `
+		.dert-gg {
+				vertical-align: middle !important;
+		}
+	`
+
+	var styleSheet = document.createElement("style")
+	styleSheet.innerText = styles
+	document.head.appendChild(styleSheet)
+
 	chrome.runtime.sendMessage({type: "isAuthenticated"}, function({isAuthenticated}) {
 		if (isAuthenticated) {
 			let nodes = document.evaluate("//ul[@id='entry-item-list']/li", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
@@ -151,23 +161,18 @@ function run() {
 			for (let i = 0; i < nodes.snapshotLength; i++) {
 				let node = nodes.snapshotItem(i);
 				let entry = new Entry(node);
+
 				ENTRIES.push(entry);
-				console.log(JSON.stringify(entry))
 				entry.appendDertGGButton();
 			}
 		}
-
-		console.log(ENTRIES);
-		console.log(ENTRIES.map(entry => entry.entryId));
 	});
 }
 
 function getVotes() {
 	let entryIds = ENTRIES.map(entry => entry.entryId);
 
-	chrome.runtime.sendMessage({type: "getVotes", entryIds: entryIds}, function(response) {
-		console.log("Here's the response", response);
-	});
+	chrome.runtime.sendMessage({type: "getVotes", entryIds: entryIds});
 }
 
 run();
