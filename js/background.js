@@ -1,3 +1,5 @@
+import { Socket } from "./phoenix/index.js"
+
 const UNAUTHENTICATED_ICONSET = {
   "16": "/img/droplet_unauthenticated_16.png",
   "24": "/img/droplet_unauthenticated_24.png",
@@ -71,6 +73,8 @@ chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.sync.set({buttonName: "derdini sikeyim"});
 });
 
+let channels = [];
+
 chrome.runtime.onMessage.addListener(
    function(request, sender, sendResponse) {
     if (request.type == "isAuthenticated") {
@@ -90,6 +94,21 @@ chrome.runtime.onMessage.addListener(
 
     } else if (request.type == "getVotes") {
 
+    } else if (request.type == "join") {
+      console.log("Got join request for channel: ", request.room)
+
+      let channel = socket.channel(request.room, {})
+
+      channel.join()
+	.receive("ok", resp => { channels = [...channels, channel] })
+	.receive("error", resp => { console.log("Unable to join", resp) })
+
+    } else if (request.type == "leave") {
+      console.log("Got leave request for channel: ", request.room)
+
+      channels.find(({topic}) => topic == request.room).leave()
+	.receive("ok", resp => { console.log("Left successfully", resp) })
+	.receive("error", resp => { console.log("Unable to leave", resp) })
     }
 
     //  If you want to asynchronously use sendResponse,
@@ -178,3 +197,12 @@ async function sendGetVotesReq(votesURL, token, requestParams) {
     body: JSON.stringify(requestParams)
   });
 }
+
+/******************** WEBSOCKET ********************/
+
+let socket = new Socket("ws://localhost:4000/socket", {params: {token: "foobar"}})
+
+socket.connect()
+
+console.log(socket)
+console.log("socket connected")
