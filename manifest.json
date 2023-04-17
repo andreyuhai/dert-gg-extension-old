@@ -1,44 +1,57 @@
 {
-    "name": "dert.gg",
-    "description": "kutsal dert kaynağı",
-    "version": "0.1.0",
-    "manifest_version": 3,
-    "options_ui": {
-        "page": "/options/options.html",
-        "open_in_tab": false
-    },
-    "permissions": ["storage"],
-    "background": {
-        "service_worker": "background.js"
-    },
-    "action": {
-        "default_icon": {
-            "16": "/img/droplet_unauthenticated_16.png",
-            "24": "/img/droplet_unauthenticated_24.png",
-            "32": "/img/droplet_unauthenticated_32.png",
-            "64": "/img/droplet_unauthenticated_64.png",
-            "128": "/img/droplet_unauthenticated_128.png",
-            "256": "/img/droplet_unauthenticated_256.png",
-            "512": "/img/droplet_unauthenticated_512.png"
-        }
-    },
-    "icons": {
-        "16": "/img/droplet_unauthenticated_16.png",
-        "24": "/img/droplet_unauthenticated_24.png",
-        "32": "/img/droplet_unauthenticated_32.png",
-        "64": "/img/droplet_unauthenticated_64.png",
-        "128": "/img/droplet_unauthenticated_128.png",
-        "256": "/img/droplet_unauthenticated_256.png",
-        "512": "/img/droplet_unauthenticated_512.png"
-    },
-    "content_scripts": [
-        {
-            "matches": ["https://eksisozluk.com/*"],
-            "exclude_matches": ["https://eksisozluk.com/biri/*", "https://eksisozluk.com/entry/*"],
-            "js": ["content-script.js"]
-        }
-    ],
-    "externally_connectable": {
-        "matches": ["https://wild-frog-7798.fly.dev/*", "http://localhost:4000/*"]
+  "name": "dert.gg",
+  "description": "kutsal dert kaynağı",
+  "version": "0.1.0",
+  "manifest_version": 3,
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
+  },
+  "permissions": ["storage", "tabs"],
+  "background": {
+    "service_worker": "js/background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_icon": {
+      "16": "/img/droplet_unauthenticated_16.png",
+      "24": "/img/droplet_unauthenticated_24.png",
+      "32": "/img/droplet_unauthenticated_32.png",
+      "64": "/img/droplet_unauthenticated_64.png",
+      "128": "/img/droplet_unauthenticated_128.png",
+      "256": "/img/droplet_unauthenticated_256.png",
+      "512": "/img/droplet_unauthenticated_512.png"
     }
+  },
+  "icons": {
+    "16": "/img/droplet_unauthenticated_16.png",
+    "24": "/img/droplet_unauthenticated_24.png",
+    "32": "/img/droplet_unauthenticated_32.png",
+    "64": "/img/droplet_unauthenticated_64.png",
+    "128": "/img/droplet_unauthenticated_128.png",
+    "256": "/img/droplet_unauthenticated_256.png",
+    "512": "/img/droplet_unauthenticated_512.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://eksisozluk.com/*", "https://eksisozluk2023.com/*"],
+      "exclude_matches": [
+	"*://eksisozluk.com/",
+	"*://eksisozluk.com/biri/*",
+	"*://eksisozluk.com/entry/*",
+	"*://eksisozluk.com/basliklar/*",
+	"*://eksisozluk.com/mesaj/*",
+	"*://eksisozluk2023.com/",
+	"*://eksisozluk2023.com/biri/*",
+	"*://eksisozluk2023.com/entry/*",
+	"*://eksisozluk2023.com/basliklar/*",
+	"*://eksisozluk2023.com/mesaj/*"
+      ],
+      "js": ["js/content-script.js", "js/addbutton.js", "js/socket.js", "js/dert_gg_button.js"]
+    }
+  ],
+  "externally_connectable": {
+    "matches": ["https://wild-frog-7798.fly.dev/*", "http://localhost:4000/*"]
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlcy5Vy0PRSVaUkTNRVvbvmHB50fTI4HPjp7FJzKBC5L15EKzoaDYP5/1dw4Ozzd1V/kaOFQ5afDn3fpbY68qALYXnI3P9tFGrnly+JbYbGkQb6yL+9xWMtH+ZLPgBlP18E08bclzy6sjEplpkV8JA5EwbzyEQPv5fxU02jk2EUFDwcr574bnbaIdseN5xQoNmFmwincvgiPSN6y01C1If1hqYVOwuEfY/a7rmhmmVdEHFi7nw3gmd4GxShDbG/bOkE0Rd3OPVglsi7hw56OBvxKqK3AAE8CrtieViy+DRCUWCH6glLd88gu77lQqL/N7EmzswaczF7nUolQQHzRt/wIDAQAB"
 }
