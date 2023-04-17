@@ -16,20 +16,6 @@ function click_handler() {
   if (topic && entry_id) {
     chrome.runtime.sendMessage({type: action, entryId: entry_id, topic: topic});
   }
-
-  switch (action) {
-    case 'upvote':
-      this.setAttribute('data-action', 'unvote');
-      this.style.color = "#53a245";
-      dert_gg_count.style.color = "#53a245";
-      break;
-
-    case 'unvote':
-      this.setAttribute('data-action', 'upvote');
-      this.style.color = "#bdbdbd";
-      dert_gg_count.style.color = "#bdbdbd";
-      break;
-  }
 };
 
 function create_dert_gg_button() {

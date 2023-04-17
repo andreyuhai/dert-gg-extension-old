@@ -36,13 +36,15 @@
     {
       "matches": ["https://eksisozluk.com/*", "https://eksisozluk2023.com/*"],
       "exclude_matches": [
+	"*://eksisozluk.com/",
 	"*://eksisozluk.com/biri/*",
-	"*://eksisozluk2023.com/biri/*",
 	"*://eksisozluk.com/entry/*",
-	"*://eksisozluk2023.com/entry/*",
 	"*://eksisozluk.com/basliklar/*",
-	"*://eksisozluk2023.com/basliklar/*",
 	"*://eksisozluk.com/mesaj/*",
+	"*://eksisozluk2023.com/",
+	"*://eksisozluk2023.com/biri/*",
+	"*://eksisozluk2023.com/entry/*",
+	"*://eksisozluk2023.com/basliklar/*",
 	"*://eksisozluk2023.com/mesaj/*"
       ],
       "js": ["js/content-script.js", "js/addbutton.js", "js/socket.js", "js/dert_gg_button.js"]

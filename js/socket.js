@@ -57,6 +57,36 @@ chrome.runtime.onMessage.addListener(
   }
 )
 
+chrome.runtime.onMessage.addListener(
+  function (msg, sender, sendResponse) {
+    if (msg.type == 'upvote_successful') {
+      console.log("Running here bruv no worries")
+      let dert_gg_button = document.querySelector(`li[data-id="${msg.entry_id}"] .dert-gg-button`);
+      let dert_gg_count = document.querySelector(`li[data-id="${msg.entry_id}"] .dert-gg-count`);
+
+      dert_gg_button.setAttribute('data-action', 'unvote');
+
+      dert_gg_button.style.color = "#53a245";
+      dert_gg_count.style.color = "#53a245";
+    }
+  }
+)
+
+chrome.runtime.onMessage.addListener(
+  function (msg, sender, sendResponse) {
+    if (msg.type == 'unvote_successful') {
+      console.log("Running here bruv no worries")
+      let dert_gg_button = document.querySelector(`li[data-id="${msg.entry_id}"] .dert-gg-button`);
+      let dert_gg_count = document.querySelector(`li[data-id="${msg.entry_id}"] .dert-gg-count`);
+
+      dert_gg_button.setAttribute('data-action', 'upvote');
+
+      dert_gg_button.style.color = "#bdbdbd";
+      dert_gg_count.style.color = "#bdbdbd";
+    }
+  }
+)
+
 function find_vote_count_for_entry_id(entry_id, vote_counts) {
   return vote_counts.find(vote_count => entry_id in vote_count);
 };
