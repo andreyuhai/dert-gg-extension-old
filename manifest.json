@@ -7,7 +7,7 @@
     "page": "options.html",
     "open_in_tab": false
   },
-  "permissions": ["storage"],
+  "permissions": ["storage", "tabs"],
   "background": {
     "service_worker": "js/background.js",
     "type": "module"
@@ -36,15 +36,20 @@
     {
       "matches": ["https://eksisozluk.com/*", "https://eksisozluk2023.com/*"],
       "exclude_matches": [
-	"https://eksisozluk.com/biri/*",
-	"https://eksisozluk2023.com/biri/*",
-	"https://eksisozluk.com/entry/*",
-	"https://eksisozluk2023.com/entry/*"
+	"*://eksisozluk.com/biri/*",
+	"*://eksisozluk2023.com/biri/*",
+	"*://eksisozluk.com/entry/*",
+	"*://eksisozluk2023.com/entry/*",
+	"*://eksisozluk.com/basliklar/*",
+	"*://eksisozluk2023.com/basliklar/*",
+	"*://eksisozluk.com/mesaj/*",
+	"*://eksisozluk2023.com/mesaj/*"
       ],
-      "js": ["js/content-script.js", "js/addbutton.js", "js/socket.js"]
+      "js": ["js/content-script.js", "js/addbutton.js", "js/socket.js", "js/dert_gg_button.js"]
     }
   ],
   "externally_connectable": {
     "matches": ["https://wild-frog-7798.fly.dev/*", "http://localhost:4000/*"]
-  }
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlcy5Vy0PRSVaUkTNRVvbvmHB50fTI4HPjp7FJzKBC5L15EKzoaDYP5/1dw4Ozzd1V/kaOFQ5afDn3fpbY68qALYXnI3P9tFGrnly+JbYbGkQb6yL+9xWMtH+ZLPgBlP18E08bclzy6sjEplpkV8JA5EwbzyEQPv5fxU02jk2EUFDwcr574bnbaIdseN5xQoNmFmwincvgiPSN6y01C1If1hqYVOwuEfY/a7rmhmmVdEHFi7nw3gmd4GxShDbG/bOkE0Rd3OPVglsi7hw56OBvxKqK3AAE8CrtieViy+DRCUWCH6glLd88gu77lQqL/N7EmzswaczF7nUolQQHzRt/wIDAQAB"
 }
