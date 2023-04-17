@@ -52,6 +52,5 @@
   ],
   "externally_connectable": {
     "matches": ["https://wild-frog-7798.fly.dev/*", "http://localhost:4000/*"]
-  },
-  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlcy5Vy0PRSVaUkTNRVvbvmHB50fTI4HPjp7FJzKBC5L15EKzoaDYP5/1dw4Ozzd1V/kaOFQ5afDn3fpbY68qALYXnI3P9tFGrnly+JbYbGkQb6yL+9xWMtH+ZLPgBlP18E08bclzy6sjEplpkV8JA5EwbzyEQPv5fxU02jk2EUFDwcr574bnbaIdseN5xQoNmFmwincvgiPSN6y01C1If1hqYVOwuEfY/a7rmhmmVdEHFi7nw3gmd4GxShDbG/bOkE0Rd3OPVglsi7hw56OBvxKqK3AAE8CrtieViy+DRCUWCH6glLd88gu77lQqL/N7EmzswaczF7nUolQQHzRt/wIDAQAB"
+  }
 }
